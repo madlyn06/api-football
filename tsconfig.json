@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "es2022",
+    "ignoreDeprecations": "6.0",
+    "composite": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "strictNullChecks": false,
+    "types": ["node", "jest", "multer"],
+    "noUncheckedSideEffectImports": false,
+    "libReplacement": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "rootDir": "./",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false
+  },
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
+  "exclude": ["libs/**/*", "node_modules", "dist", "**/*.spec.ts"]
+}
