@@ -1,0 +1,153 @@
+services:
+  - type: web
+    name: nest-starter
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: corepack enable && corepack prepare pnpm@10.17.0 --activate && pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm run start:prod
+    healthCheckPath: /api
+    envVars:
+      - key: NODE_VERSION
+        value: 22.15.0
+      - key: NODE_ENV
+        value: production
+      - key: APP_NAME
+        value: Nest Starter
+      - key: APP_PORT
+        value: 10000
+      - key: TZ
+        value: UTC
+      - key: FRONTEND_URL
+        sync: false
+
+      # Database (Render Postgres). DB_HOST/DB_PORT are not exposed as
+      # blueprint reference properties, so paste them manually from the
+      # database's "Info" page in the Render Dashboard after first sync.
+      - key: DB_CONNECTION
+        value: postgres
+      - key: DB_SCHEMA
+        value: public
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 5432
+      - key: DB_USERNAME
+        fromDatabase:
+          name: nest-starter-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: nest-starter-db
+          property: password
+      - key: DB_DATABASE
+        fromDatabase:
+          name: nest-starter-db
+          property: database
+
+      # Redis (Render Key Value)
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: nest-starter-redis
+          property: connectionString
+
+      # JWT
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_ACCESS_TOKEN_EXPIRES_IN
+        value: 30d
+      - key: JWT_REFRESH_TOKEN_EXPIRES_IN
+        value: 30d
+
+      # Google OAuth
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: GOOGLE_WEBHOOK_BASE_URL
+        sync: false
+
+      # AWS SES
+      - key: AWS_SES_SENDER
+        sync: false
+      - key: AWS_SES_REGION
+        sync: false
+      - key: AWS_SES_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SES_ACCESS_SECRET_ACCESS_KEY
+        sync: false
+
+      # AWS S3
+      - key: AWS_S3_REGION
+        sync: false
+      - key: AWS_S3_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_S3_BUCKET_NAME
+        sync: false
+      - key: AWS_S3_URL
+        sync: false
+
+      # Microsoft Outlook OAuth
+      - key: MICROSOFT_CLIENT_ID
+        sync: false
+      - key: MICROSOFT_CLIENT_SECRET
+        sync: false
+      - key: MICROSOFT_REDIRECT_URI
+        sync: false
+
+      # Zoom OAuth
+      - key: ZOOM_CLIENT_ID
+        sync: false
+      - key: ZOOM_CLIENT_SECRET
+        sync: false
+      - key: ZOOM_REDIRECT_URI
+        sync: false
+      - key: ZOOM_WEBHOOK_BASE_URL
+        sync: false
+      - key: ZOOM_SECRET_TOKEN
+        sync: false
+
+      # Google Service Account
+      - key: GOOGLE_SERVICE_CLIENT_EMAIL
+        sync: false
+      - key: GOOGLE_SERVICE_PRIVATE_KEY
+        sync: false
+      - key: GOOGLE_SERVICE_ORGANIZER_EMAIL
+        sync: false
+
+      # Microsoft Entra ID
+      - key: MICROSOFT_ENTRA_CLIENT_ID
+        sync: false
+      - key: MICROSOFT_ENTRA_CLIENT_SECRET
+        sync: false
+      - key: MICROSOFT_ENTRA_TENANT_ID
+        sync: false
+      - key: MICROSOFT_ENTRA_ORGANIZER_ID
+        sync: false
+
+      # Zoom Server-to-Server
+      - key: ZOOM_SERVER_ACCOUNT_ID
+        sync: false
+      - key: ZOOM_SERVER_CLIENT_ID
+        sync: false
+      - key: ZOOM_SERVER_CLIENT_SECRET
+        sync: false
+
+  - type: keyvalue
+    name: nest-starter-redis
+    plan: free
+    ipAllowList: []
+
+databases:
+  - name: nest-starter-db
+    plan: free
+    databaseName: nest_starter
+    user: nest_starter
