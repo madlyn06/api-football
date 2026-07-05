@@ -14,6 +14,11 @@ import { GetFixturesDto } from "./dto/get-fixtures.dto";
 export class FixtureController {
   constructor(private readonly fixtureService: FixtureService) {}
 
+  @Get("health")
+  async health() {
+    return { status: "ok" };
+  }
+
   @Get("leagues")
   @ApiExcludeEndpoint()
   async getLeagues() {
