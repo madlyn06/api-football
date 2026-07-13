@@ -33,6 +33,14 @@ async function bootstrap() {
   app.useGlobalPipes(new PayloadValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
+  // Prevent Nginx/Cloudflare from serving a stale Swagger UI or spec
+  app.use(/^\/swagger/, (_req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+  });
+
   setupSwagger(app, appName, ['/auth-service']);
   await app.init();
 
