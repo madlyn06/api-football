@@ -19,19 +19,13 @@ export class FixtureController {
     return { status: "ok" };
   }
 
-  @Get("leagues")
-  @ApiExcludeEndpoint()
-  async getLeagues() {
-    return this.fixtureService.getLeagues();
-  }
-
   @Get("crawl")
   @ApiExcludeEndpoint()
   async crawlFixtures() {
     return this.fixtureService.crawlFixtures();
   }
 
-  @Post("all")
+  @Post("football")
   @ApiOperation({
     summary: "Get fixtures from local file",
     description:
@@ -40,5 +34,38 @@ export class FixtureController {
   @HttpCode(HttpStatus.OK)
   async getFixturesFromFile(@Body() query: GetFixturesDto) {
     return this.fixtureService.getFixturesFromFile(query);
+  }
+
+  @Get("crawl-basketball")
+  @ApiExcludeEndpoint()
+  async crawlBasketballFixtures() {
+    return this.fixtureService.crawlBasketballFixtures();
+  }
+
+  @Post("basketball")
+  @ApiOperation({
+    summary: "Get basketball fixtures from local file",
+    description:
+      "Return basketball fixtures previously crawled and stored in the local basketball_fixtures.json file. Supports filtering by fixture ids or a date range, sorting by match date, and pagination. When fixture_ids is provided, date filter and pagination are ignored."
+  })
+  @HttpCode(HttpStatus.OK)
+  async getBasketballFixturesFromFile(@Body() query: GetFixturesDto) {
+    return this.fixtureService.getBasketballFixturesFromFile(query);
+  }
+
+  @ApiExcludeEndpoint()
+  @Get("crawl-bassball")
+  async crawlBassballFixtures() {
+    return this.fixtureService.crawlBassballFixtures();
+  }
+
+  @Post("bassball-leagues")
+  @ApiOperation({
+    summary: "Get bassball leagues",
+    description:
+      "Return bassball leagues previously crawled and stored in the local bassball_leagues.json file."
+  })
+  async getBassballLeagues(@Body() query: GetFixturesDto) {
+    return this.fixtureService.getBassballFixturesFromFile(query);
   }
 }

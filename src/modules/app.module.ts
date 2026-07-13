@@ -3,10 +3,12 @@ import {
   getWinstonConfig,
   HttpLoggerMiddleware,
 } from "src/common";
+import { join } from "node:path";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule, ConfigService, ConfigType } from "@nestjs/config";
 import { APP_FILTER, APP_GUARD } from "@nestjs/core";
 import { ScheduleModule } from "@nestjs/schedule";
+import { ServeStaticModule } from "@nestjs/serve-static";
 import { WinstonModule } from "nest-winston";
 import {
   appConfiguration,
@@ -42,6 +44,10 @@ import { FixtureModule } from "./fixture";
       ],
     }),
     ScheduleModule.forRoot(),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), "public"),
+      serveRoot: "/public",
+    }),
     // MikroOrmModule.forRootAsync({
     //   useFactory: (dbConfig: ConfigType<typeof dbConfiguration>) => {
     //     return {
